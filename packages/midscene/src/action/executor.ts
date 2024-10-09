@@ -7,7 +7,7 @@ import type {
   ExecutionTaskReturn,
   ExecutorContext,
 } from '@/types';
-import { getPkgInfo } from '@/utils';
+import { getMidscenePkgInfo } from '@midscene/shared/fs';
 
 export class Executor {
   name: string;
@@ -147,12 +147,13 @@ export class Executor {
 
     if (successfullyCompleted) {
       this.status = 'completed';
-      if (this.tasks.length) {
-        // return the last output
-        return this.tasks[this.tasks.length - 1].output;
-      }
     } else {
       this.status = 'error';
+    }
+    if (this.tasks.length) {
+      // return the last output
+      const outputIndex = Math.min(taskIndex, this.tasks.length - 1);
+      return this.tasks[outputIndex].output;
     }
   }
 
@@ -175,7 +176,7 @@ export class Executor {
 
   dump(): ExecutionDump {
     const dumpData: ExecutionDump = {
-      sdkVersion: getPkgInfo().version,
+      sdkVersion: getMidscenePkgInfo(__dirname).version,
       logTime: Date.now(),
       name: this.name,
       description: this.description,

@@ -1,3 +1,5 @@
+import type { ResponseFormatJSONSchema } from 'openai/resources';
+
 export function systemPromptToFindElement() {
   return `
 ## Role:
@@ -26,6 +28,9 @@ You are an expert in software page image (2D) and page element text analysis.
 - The returned data must conform to the specified JSON format.
 
 ## Output Format:
+
+Please return the result in JSON format as follows:
+
 \`\`\`json
 {
   "elements": [
@@ -135,3 +140,48 @@ export function multiDescription(multi: boolean) {
     ? 'multiple elements matching the description (two or more)'
     : 'The element closest to the description (only one)';
 }
+
+export const findElementSchema: ResponseFormatJSONSchema = {
+  type: 'json_schema',
+  json_schema: {
+    name: 'find_elements',
+    strict: true,
+    schema: {
+      type: 'object',
+      properties: {
+        elements: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              reason: {
+                type: 'string',
+                description: 'Reason for finding this element',
+              },
+              text: {
+                type: 'string',
+                description: 'Text content of the element',
+              },
+              id: {
+                type: 'string',
+                description: 'ID of this element',
+              },
+            },
+            required: ['reason', 'text', 'id'],
+            additionalProperties: false,
+          },
+          description: 'List of found elements',
+        },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          description: 'List of error messages, if any',
+        },
+      },
+      required: ['elements', 'errors'],
+      additionalProperties: false,
+    },
+  },
+};

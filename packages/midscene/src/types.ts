@@ -15,7 +15,8 @@ export interface Size {
 export type Rect = Point & Size;
 
 enum NodeType {
-  INPUT = 'INPUT Node',
+  CONTAINER = 'CONTAINER Node',
+  FORM_ITEM = 'FORM_ITEM Node',
   BUTTON = 'BUTTON Node',
   IMG = 'IMG Node',
   TEXT = 'TEXT Node',
@@ -209,10 +210,10 @@ export interface PlanningActionParamInputOrKeyPress {
 }
 export interface PlanningActionParamScroll {
   scrollType:
-    | 'ScrollUntilBottom'
-    | 'ScrollUntilTop'
-    | 'ScrollDown'
-    | 'ScrollUp';
+    | 'scrollUntilTop'
+    | 'scrollUntilBottom'
+    | 'scrollUpOneScreen'
+    | 'scrollDownOneScreen';
 }
 
 export interface PlanningActionParamAssert {

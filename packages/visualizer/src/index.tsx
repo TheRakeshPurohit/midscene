@@ -5,8 +5,8 @@ import { useExecutionDump } from '@/component/store';
 import { DownOutlined } from '@ant-design/icons';
 import type { GroupedActionDump } from '@midscene/core';
 import { Helmet } from '@modern-js/runtime/head';
-import { ConfigProvider, Dropdown, Select, Upload, message } from 'antd';
-import type { MenuProps, UploadProps } from 'antd';
+import { Alert, ConfigProvider, Dropdown, Select, Upload, message } from 'antd';
+import type { UploadProps } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
@@ -144,7 +144,9 @@ export function Visualizer(props: {
         }}
       >
         <Panel maxSize={95} defaultSize={20}>
-          <Sidebar logoAction={props?.logoAction} />
+          <div className="page-side">
+            <Sidebar logoAction={props?.logoAction} />
+          </div>
         </Panel>
         <PanelResizeHandle
           onDragging={(isChanging) => {
@@ -160,19 +162,18 @@ export function Visualizer(props: {
             <Timeline key={mainLayoutChangeFlag} />
             <div className="main-content">
               <PanelGroup
-                autoSaveId="page-detail-layout"
+                autoSaveId="page-detail-layout-v2"
                 direction="horizontal"
               >
-                <Panel maxSize={95}>
-                  <div className="main-side">
-                    <DetailSide />
-                  </div>
-                </Panel>
-                <PanelResizeHandle />
-
                 <Panel defaultSize={75} maxSize={95}>
                   <div className="main-canvas-container">
                     <DetailPanel />
+                  </div>
+                </Panel>
+                <PanelResizeHandle />
+                <Panel maxSize={95}>
+                  <div className="main-side">
+                    <DetailSide />
                   </div>
                 </Panel>
               </PanelGroup>
@@ -259,25 +260,21 @@ export function Visualizer(props: {
         key={`render-${globalRenderCount}`}
         style={{ height: containerHeight }}
       >
-        {hideLogo ? null : (
-          <div className="page-nav">
-            <div className="logo">
-              <img
-                alt="Midscene_logo"
-                src="https://lf3-static.bytednsdoc.com/obj/eden-cn/vhaeh7vhabf/logo-light-with-text.png"
-              />
-            </div>
-            {/* <div className="dump-selector">{selectWidget}</div> */}
-            <PlaywrightCaseSelector
-              dumps={props.dumps}
-              selected={executionDump}
-              onSelect={(dump) => {
-                setGroupedDump(dump);
-              }}
+        <div className="page-nav">
+          <div className="logo">
+            <img
+              alt="Midscene_logo"
+              src="https://lf3-static.bytednsdoc.com/obj/eden-cn/vhaeh7vhabf/logo-light-with-text.png"
             />
-            {/* <div className="title">Midscene.js</div> */}
           </div>
-        )}
+          <PlaywrightCaseSelector
+            dumps={props.dumps}
+            selected={executionDump}
+            onSelect={(dump) => {
+              setGroupedDump(dump);
+            }}
+          />
+        </div>
         {mainContent}
       </div>
       <GlobalHoverPreview />
@@ -353,6 +350,27 @@ function mount(id: string) {
   const dumpElements = document.querySelectorAll(
     'script[type="midscene_web_dump"]',
   );
+  if (dumpElements.length === 1 && dumpElements[0].textContent?.trim() === '') {
+    const errorPanel = (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          padding: '100px',
+          boxSizing: 'border-box',
+        }}
+      >
+        <Alert
+          message="Midscene.js - Error"
+          description="There is no dump data to display."
+          type="error"
+          showIcon
+        />
+      </div>
+    );
+    return root.render(errorPanel);
+  }
+
   const reportDump: ExecutionDumpWithPlaywrightAttributes[] = [];
   Array.from(dumpElements)
     .filter((el) => {
@@ -384,7 +402,6 @@ function mount(id: string) {
       }
     });
 
-  // console.log('reportDump', reportDump);
   root.render(<Visualizer dumps={reportDump} />);
 }
 

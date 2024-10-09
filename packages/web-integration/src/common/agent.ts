@@ -1,4 +1,3 @@
-import { assert } from 'node:console';
 import type { WebPage } from '@/common/page';
 import type {
   AgentWaitForOpt,
@@ -16,6 +15,7 @@ import { printReportMsg, reportFileName } from './utils';
 
 export interface PageAgentOpt {
   testId?: string;
+  cacheId?: string;
   groupName?: string;
   groupDescription?: string;
   cache?: AiTaskCache;
@@ -55,7 +55,7 @@ export class PageAgent {
       executions: [],
     };
     this.taskExecutor = new PageTaskExecutor(this.page, {
-      cache: opts?.cache || { aiTasks: [] },
+      cacheId: opts?.cacheId,
     });
     this.reportFileName = reportFileName(opts?.testId || 'web');
   }
@@ -117,7 +117,7 @@ export class PageAgent {
 
     if (!output?.pass) {
       const errMsg = msg || `Assertion failed: ${assertion}`;
-      const reasonMsg = `Reason: ${output?.thought} || (no_reason)`;
+      const reasonMsg = `Reason: ${output?.thought || '(no_reason)'}`;
       throw new Error(`${errMsg}\n${reasonMsg}`);
     }
   }

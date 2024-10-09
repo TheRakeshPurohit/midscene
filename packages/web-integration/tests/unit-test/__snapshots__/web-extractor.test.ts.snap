@@ -1,0 +1,473 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`extractor > basic 1`] = `
+[
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Data Record",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "1970-01-01 19:25:01",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "User Name: Stella",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "ID",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Field 2",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Field 3",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Field 4",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Field 5",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "30S",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Kace Cervantes",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Aylin Sawyer",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Jefferson Kirby",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Skyla Jefferson",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "70U",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Florence Davenport",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Dariel Acevedo",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Ashlynn Delacruz",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Memphis Leal",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "3AY",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Crystal Newman",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Anderson Brown",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Charlotte Griffith",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Franklin Everett",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "YPG",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Kori Payne",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Edward Blevins",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Aila Gill",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Matthias Reed",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "ZEN",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Magnolia Duke",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Kalel Glover",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Alessia Barton",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Cassius Peck",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Form",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Name:",
+  },
+  {
+    "attributes": {
+      "htmlTagName": "<input>",
+      "id": "J_input",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "Hello World This is Placeholder",
+    },
+    "content": "Hello World This is Placeholder",
+  },
+  {
+    "attributes": {
+      "htmlTagName": "<input>",
+      "id": "J_input",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "Hello World This is Placeholder",
+      "value": "Now I am a value, instead of placeholder",
+    },
+    "content": "Now I am a value, instead of placeholder",
+  },
+  {
+    "attributes": {
+      "nodeType": "BUTTON Node",
+    },
+    "content": "Click Me",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Shape",
+  },
+  {
+    "attributes": {
+      "htmlTagName": "<input>",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "You shouldn't see this placeholder.",
+      "value": "Rectangle",
+    },
+    "content": "Rectangle",
+  },
+  {
+    "attributes": {
+      "htmlTagName": "<textarea>",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "this_is_a_textarea",
+    },
+    "content": "this_is_a_textarea",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "English",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "中文",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Tiếng Việt",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Choose an option:",
+  },
+  {
+    "attributes": {
+      "htmlTagName": "<select>",
+      "id": "options",
+      "name": "options",
+      "nodeType": "FORM_ITEM Node",
+    },
+    "content": "Option 1",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "This is zoomed content",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Something Else",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "输入搜索关键词",
+  },
+  {
+    "attributes": {
+      "aria-autocomplete": "list",
+      "aria-expanded": "false",
+      "aria-haspopup": "true",
+      "aria-label": "搜索任何物品",
+      "aria-owns": "ui-id-1",
+      "autocapitalize": "off",
+      "autocomplete": "off",
+      "autocorrect": "off",
+      "class": ".gh-tb.ui-autocomplete-input",
+      "htmlTagName": "<input>",
+      "id": "gh-ac",
+      "maxlength": "300",
+      "name": "_nkw",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "搜索任何物品",
+      "role": "combobox",
+      "size": "50",
+      "spellcheck": "false",
+      "type": "text",
+    },
+    "content": "搜索任何物品",
+  },
+  {
+    "attributes": {
+      "class": ".life-core-input.life-core-input-size-md",
+      "htmlTagName": "<input>",
+      "nodeType": "FORM_ITEM Node",
+      "placeholder": "验证码",
+      "tabindex": "0",
+      "type": "text",
+    },
+    "content": "验证码",
+  },
+  {
+    "attributes": {
+      "class": ".life-core-checkbox-icon",
+      "nodeType": "CONTAINER Node",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "aria-label": "Search",
+      "class": ".btn",
+      "nodeType": "BUTTON Node",
+      "tabindex": "0",
+      "type": "submit",
+    },
+    "content": " ",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "content 000",
+  },
+  {
+    "attributes": {
+      "nodeType": "CONTAINER Node",
+      "style": "height: 30px;width: 100px;",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "content AAA",
+  },
+  {
+    "attributes": {
+      "nodeType": "IMG Node",
+      "src": "data:image/svg+xml;...",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "nodeType": "BUTTON Node",
+      "very-long-attr": "width: 100px; height: 100px; background-color: #cc...",
+    },
+    "content": "long-style-content",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Click me",
+  },
+  {
+    "attributes": {
+      "aria-controls": "semi-select-5yxiyng",
+      "class": ".widget",
+      "nodeType": "CONTAINER Node",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "aria-labelledby": "eval_object.object_type-label",
+      "class": ".widget",
+      "nodeType": "CONTAINER Node",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Content 1",
+  },
+  {
+    "attributes": {
+      "class": ".child-container-without-content-2-1",
+      "nodeType": "CONTAINER Node",
+      "style": "width: 100px; height: 100px; background-color: #cc...",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Content 2",
+  },
+  {
+    "attributes": {
+      "nodeType": "TEXT Node",
+    },
+    "content": "Nested Content 3",
+  },
+  {
+    "attributes": {
+      "class": ".child-container-4",
+      "nodeType": "CONTAINER Node",
+      "style": "width: 100px; height: 100px; background-color: #cc...",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "nodeType": "IMG Node",
+      "svgContent": "true",
+    },
+    "content": "",
+  },
+  {
+    "attributes": {
+      "frameborder": "0",
+      "height": "400px",
+      "nodeType": "CONTAINER Node",
+      "src": "child.html",
+      "width": "400px",
+    },
+    "content": "",
+  },
+]
+`;

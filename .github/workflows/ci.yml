@@ -1,4 +1,4 @@
-name: AI test
+name: CI
 
 on:
   push:
@@ -34,7 +34,15 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'pnpm'
+
+    - name: Cache Puppeteer dependencies
+      uses: actions/cache@v3
+      id: cache-puppeteer
+      with:
+        path: ~/.cache/puppeteer
+        key: ${{ runner.os }}-puppeteer-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-puppeteer-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile

@@ -24,11 +24,12 @@ import Insight, {
   type PlanningActionParamWaitFor,
   type PlanningActionParamError,
 } from '@midscene/core';
-import { base64Encoded } from '@midscene/core/image';
-import { commonScreenshotParam, getTmpFile, sleep } from '@midscene/core/utils';
-import type { KeyInput, Page as PuppeteerPage } from 'puppeteer';
+import { sleep } from '@midscene/core/utils';
+import { base64Encoded } from '@midscene/shared/img';
+import type { KeyInput } from 'puppeteer';
+import type { ElementInfo } from '../extractor';
 import type { WebElementInfo } from '../web-element';
-import { type AiTaskCache, TaskCache } from './task-cache';
+import { TaskCache } from './task-cache';
 import { type WebUIContext, parseContextFromWebPage } from './utils';
 
 interface ExecutionResult<OutputType = any> {
@@ -43,24 +44,23 @@ export class PageTaskExecutor {
 
   taskCache: TaskCache;
 
-  constructor(page: WebPage, opts: { cache: AiTaskCache }) {
+  constructor(page: WebPage, opts: { cacheId: string | undefined }) {
     this.page = page;
     this.insight = new Insight<WebElementInfo, WebUIContext>(async () => {
       return await parseContextFromWebPage(page);
     });
-    this.taskCache = new TaskCache(opts);
+
+    this.taskCache = new TaskCache({
+      fileName: opts?.cacheId,
+    });
   }
 
   private async recordScreenshot(timing: ExecutionRecorderItem['timing']) {
-    const file = getTmpFile('jpeg');
-    await this.page.screenshot({
-      ...commonScreenshotParam,
-      path: file,
-    });
+    const file = await this.page.screenshot();
     const item: ExecutionRecorderItem = {
       type: 'screenshot',
       ts: Date.now(),
-      screenshot: base64Encoded(file),
+      screenshot: base64Encoded(file as string),
       timing,
     };
     return item;
@@ -90,7 +90,10 @@ export class PageTaskExecutor {
     return taskWithScreenshot;
   }
 
-  private async convertPlanToExecutable(plans: PlanningAction[]) {
+  private async convertPlanToExecutable(
+    plans: PlanningAction[],
+    cacheGroup?: ReturnType<TaskCache['getCacheGroupByPrompt']>,
+  ) {
     const tasks: ExecutionTaskApply[] = plans
       .map((plan) => {
         if (plan.type === 'Locate') {
@@ -98,14 +101,15 @@ export class PageTaskExecutor {
             type: 'Insight',
             subType: 'Locate',
             param: plan.param,
-            executor: async (param) => {
+            executor: async (param, taskContext) => {
+              const { task } = taskContext;
               let insightDump: InsightDump | undefined;
               const dumpCollector: DumpSubscriber = (dump) => {
                 insightDump = dump;
               };
               this.insight.onceDumpUpdatedFn = dumpCollector;
               const pageContext = await this.insight.contextRetrieverFn();
-              const locateCache = this.taskCache.readCache(
+              const locateCache = cacheGroup?.readCache(
                 pageContext,
                 'locate',
                 param.prompt,
@@ -124,9 +128,8 @@ export class PageTaskExecutor {
                 },
               });
 
-              assert(element, `Element not found: ${param.prompt}`);
               if (locateResult) {
-                this.taskCache.saveCache({
+                cacheGroup?.saveCache({
                   type: 'locate',
                   pageContext: {
                     url: pageContext.url,
@@ -136,6 +139,13 @@ export class PageTaskExecutor {
                   response: locateResult,
                 });
               }
+              if (!element) {
+                task.log = {
+                  dump: insightDump,
+                };
+                throw new Error(`Element not found: ${param.prompt}`);
+              }
+
               return {
                 output: {
                   element,
@@ -144,7 +154,7 @@ export class PageTaskExecutor {
                   dump: insightDump,
                 },
                 cache: {
-                  hit: Boolean(locateResult),
+                  hit: Boolean(locateCache),
                 },
               };
             },
@@ -200,13 +210,14 @@ export class PageTaskExecutor {
               param: plan.param,
               executor: async (taskParam, { element }) => {
                 if (element) {
-                  await this.page.mouse.click(
-                    element.center[0],
-                    element.center[1],
-                  );
+                  await this.page.clearInput(element as ElementInfo);
+
+                  if (taskParam.value === '') {
+                    return;
+                  }
+
+                  await this.page.keyboard.type(taskParam.value);
                 }
-                assert(taskParam.value, 'No value to input');
-                await this.page.keyboard.type(taskParam.value);
               },
             };
           return taskActionInput;
@@ -262,22 +273,19 @@ export class PageTaskExecutor {
               param: plan.param,
               executor: async (taskParam) => {
                 const scrollToEventName = taskParam.scrollType;
-                const innerHeight = await (this.page as PuppeteerPage).evaluate(
-                  () => window.innerHeight,
-                );
 
                 switch (scrollToEventName) {
-                  case 'ScrollUntilTop':
-                    await this.page.mouse.wheel(0, -9999999);
+                  case 'scrollUntilTop':
+                    await this.page.scrollUntilTop();
                     break;
-                  case 'ScrollUntilBottom':
-                    await this.page.mouse.wheel(0, 9999999);
+                  case 'scrollUntilBottom':
+                    await this.page.scrollUntilBottom();
                     break;
-                  case 'ScrollUp':
-                    await this.page.mouse.wheel(0, -innerHeight);
+                  case 'scrollUpOneScreen':
+                    await this.page.scrollUpOneScreen();
                     break;
-                  case 'ScrollDown':
-                    await this.page.mouse.wheel(0, innerHeight);
+                  case 'scrollDownOneScreen':
+                    await this.page.scrollDownOneScreen();
                     break;
                   default:
                     console.error(
@@ -296,8 +304,7 @@ export class PageTaskExecutor {
               subType: 'Sleep',
               param: plan.param,
               executor: async (taskParam) => {
-                assert(taskParam.timeMs, 'No time to sleep');
-                await sleep(taskParam.timeMs);
+                await sleep(taskParam.timeMs || 3000);
               },
             };
           return taskActionSleep;
@@ -332,7 +339,7 @@ export class PageTaskExecutor {
     userPrompt: string /* , actionInfo?: { actionType?: EventActions[number]['action'] } */,
   ): Promise<ExecutionResult> {
     const taskExecutor = new Executor(userPrompt);
-
+    const cacheGroup = this.taskCache.getCacheGroupByPrompt(userPrompt);
     let plans: PlanningAction[] = [];
     const planningTask: ExecutionTaskPlanningApply = {
       type: 'Planning',
@@ -342,11 +349,7 @@ export class PageTaskExecutor {
       executor: async (param) => {
         const pageContext = await this.insight.contextRetrieverFn();
         let planResult: { plans: PlanningAction[] };
-        const planCache = this.taskCache.readCache(
-          pageContext,
-          'plan',
-          userPrompt,
-        );
+        const planCache = cacheGroup.readCache(pageContext, 'plan', userPrompt);
         if (planCache) {
           planResult = planCache;
         } else {
@@ -359,7 +362,7 @@ export class PageTaskExecutor {
         // eslint-disable-next-line prefer-destructuring
         plans = planResult.plans;
 
-        this.taskCache.saveCache({
+        cacheGroup.saveCache({
           type: 'plan',
           pageContext: {
             url: pageContext.url,
@@ -388,7 +391,7 @@ export class PageTaskExecutor {
     }
 
     // append tasks
-    const executables = await this.convertPlanToExecutable(plans);
+    const executables = await this.convertPlanToExecutable(plans, cacheGroup);
     await taskExecutor.append(executables);
 
     // flush actions

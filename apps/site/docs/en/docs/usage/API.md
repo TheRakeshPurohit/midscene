@@ -106,7 +106,21 @@ expect(onesieItem.price).toBe(7.99);
 
 When considering the time required for the AI service, `.aiWaitFor` may not be very efficient. Using a simple `sleep` method might be a useful alternative to `waitFor`.
 
-## Use LangSmith (Optional)
+```typescript
+await mid.aiWaitFor("there is at least one headphone item on page");
+```
+
+## Debug Config (Optional)
+
+### Print the AI profiling
+
+By setting `MIDSCENE_DEBUG_AI_PROFILE`, you can take a look at the time and token consumption of AI calls.
+
+```shell
+export MIDSCENE_DEBUG_AI_PROFILE=1
+```
+
+### Use LangSmith
 
 LangSmith is a platform designed to debug the LLMs. To integrate LangSmith, please follow these steps:
 

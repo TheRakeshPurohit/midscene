@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 //@ts-ignore
 import dotenv from 'dotenv';
 
+const MIDSCENE_REPORT = process.env.MIDSCENE_REPORT;
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -15,11 +17,11 @@ dotenv.config({
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests/ai/e2e',
+  // testDir: './tests/ai/e2e',
   testIgnore: 'generate-test-data.spec.ts',
   timeout: 900 * 1000,
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: Boolean(process.env.CI),
   /* Retry on CI only */
@@ -35,14 +37,22 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    deviceScaleFactor: process.platform === 'darwin' ? 2 : 1, // Device scaling factor
   },
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+    MIDSCENE_REPORT
+      ? {
+          name: 'report',
+          testDir: './tests/ai/web/playwright-report-test',
+          use: { ...devices['Desktop Chrome'] },
+        }
+      : {
+          name: 'e2e',
+          testDir: './tests/ai/web/playwright',
+          use: { ...devices['Desktop Chrome'] },
+        },
   ],
   reporter: [['list'], ['./src/playwright/reporter/index.ts']],
 });

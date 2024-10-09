@@ -1,5 +1,7 @@
-import type { Page as PlaywrightPage } from 'playwright';
-import type { KeyInput, Page as PuppeteerPage } from 'puppeteer';
+import type { KeyInput } from 'puppeteer';
+import type { AppiumPage } from '../appium';
+import type { PlaywrightWebPage } from '../playwright';
+import type { PuppeteerWebPage } from '../puppeteer';
 
-export type WebPage = PlaywrightPage | PuppeteerPage;
+export type WebPage = PlaywrightWebPage | PuppeteerWebPage | AppiumPage;
 export type WebKeyInput = KeyInput;
